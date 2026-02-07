@@ -1,6 +1,6 @@
 /**
- * Badge coloré affichant le score /100 avec couleur selon performance
- * excellent 86-100: green, bien 71-85: yellow, moyen 41-70: orange, critique 0-40: red
+ * Colored badge displaying the score /100 with color based on performance
+ * excellent 86-100: green, good 71-85: yellow, medium 41-70: orange, critical 0-40: red
  */
 export default function ScoreBadge({ score, className = '' }) {
   const s = Number(score);
@@ -12,7 +12,7 @@ export default function ScoreBadge({ score, className = '' }) {
   return (
     <span
       className={`inline-flex items-center justify-center rounded-full px-3 py-1 text-lg font-bold ${bg} ${className}`}
-      title="Score de qualité"
+      title="Quality Score"
     >
       {s}/100
     </span>

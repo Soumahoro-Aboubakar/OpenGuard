@@ -19,7 +19,7 @@ export default function Maintainer() {
     setData(null);
     const match = repoUrl.trim().match(/github\.com[/:]([^/]+)\/([^/]+)/i);
     if (!match) {
-      setError('URL invalide. Format attendu: https://github.com/owner/repo');
+      setError('Invalid URL. Expected format: https://github.com/owner/repo');
       return;
     }
     setOwner(match[1]);
@@ -33,7 +33,7 @@ export default function Maintainer() {
     getRepoStats(owner, repo)
       .then((res) => {
         if (res.success && res.data) setData(res.data);
-        else setError(res.error || 'Erreur');
+        else setError(res.error || 'Error');
       })
       .catch((err) => setError(err.response?.data?.error || err.message))
       .finally(() => setLoading(false));
@@ -46,7 +46,7 @@ export default function Maintainer() {
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Maintainer Interface</h1>
         <p className="text-gray-600 mt-1">
-         Overview of open Pull Requests in a repository and statistics.
+          Overview of open Pull Requests in a repository and statistics.
         </p>
       </div>
 
@@ -67,7 +67,7 @@ export default function Maintainer() {
           {loading ? (
             <>
               <Loader2 className="w-5 h-5 animate-spin" />
-              Chargement…
+              Loading…
             </>
           ) : (
             'Check Pull Requests'
@@ -86,11 +86,11 @@ export default function Maintainer() {
           <Dashboard stats={data.stats} pullRequests={data.pullRequests} />
           <div className="rounded-xl border border-gray-200 bg-white overflow-hidden shadow-sm">
             <h2 className="text-lg font-semibold text-gray-900 px-6 py-4 border-b border-gray-200">
-              Pull Requests ouvertes
+              Open Pull Requests
             </h2>
             <ul className="divide-y divide-gray-200">
               {data.pullRequests?.length === 0 ? (
-                <li className="px-6 py-8 text-center text-gray-500">Aucune PR ouverte.</li>
+                <li className="px-6 py-8 text-center text-gray-500">No open PRs.</li>
               ) : (
                 data.pullRequests?.map((pr) => (
                   <li key={pr.number} className="px-6 py-4 hover:bg-gray-50 flex flex-wrap items-center gap-4">
@@ -98,21 +98,21 @@ export default function Maintainer() {
                       <span className="text-gray-500 font-mono text-sm">#{pr.number}</span>
                       <span className="ml-2 font-medium text-gray-900">{pr.title}</span>
                       <p className="text-sm text-gray-500 mt-1">
-                        {pr.author} · {new Date(pr.createdAt).toLocaleDateString('fr-FR')}
+                        {pr.author} · {new Date(pr.createdAt).toLocaleDateString('en-US')}
                       </p>
                     </div>
                     {pr.score != null && (
                       <ScoreBadge score={pr.score} />
                     )}
                     {pr.problemCount != null && (
-                      <span className="text-sm text-gray-600">{pr.problemCount} problème(s)</span>
+                      <span className="text-sm text-gray-600">{pr.problemCount} problem(s)</span>
                     )}
                     <button
                       type="button"
                       onClick={() => navigate(`/?pr=${encodeURIComponent(`https://github.com/${data.repo}/pull/${pr.number}`)}`)}
                       className="inline-flex items-center gap-1 text-primary font-medium hover:underline"
                     >
-                      Analyser
+                      Analyze
                       <ExternalLink className="w-4 h-4" />
                     </button>
                   </li>

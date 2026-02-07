@@ -14,7 +14,7 @@ app.use(express.json());
 
 app.use('/api', analyzeRouter);
 app.use('/api', repoRouter);
- 
+
 app.get('/api/health', (_, res) => {
   res.json({ success: true, message: 'OpenGuard API OK' });
 });

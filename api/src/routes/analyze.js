@@ -30,7 +30,7 @@ router.post('/analyze-pr', async (req, res) => {
     if (!prUrl || typeof prUrl !== 'string') {
       return res.status(400).json({
         success: false,
-        error: 'prUrl requis (URL de la Pull Request GitHub)',
+        error: 'prUrl required (GitHub Pull Request URL)',
       });
     }
 
@@ -62,7 +62,7 @@ router.post('/analyze-pr', async (req, res) => {
     console.error('analyze-pr error:', err);
     res.status(500).json({
       success: false,
-      error: err.message || 'Erreur lors de l\'analyse de la PR',
+      error: err.message || 'Error during PR analysis',
     });
   }
 });

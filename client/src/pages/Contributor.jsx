@@ -20,7 +20,7 @@ export default function Contributor() {
     setError(null);
     setResult(null);
     if (!prUrl.trim()) {
-      setError('Veuillez coller l\'URL d\'une Pull Request GitHub.');
+      setError('Please paste a GitHub Pull Request URL.');
       return;
     }
     setLoading(true);
@@ -29,10 +29,10 @@ export default function Contributor() {
       if (res.success && res.data) {
         setResult(res.data);
       } else {
-        setError(res.error || 'Erreur lors de l\'analyse.');
+        setError(res.error || 'Error during analysis.');
       }
     } catch (err) {
-      setError(err.response?.data?.error || err.message || 'Erreur réseau.');
+      setError(err.response?.data?.error || err.message || 'Network error.');
     } finally {
       setLoading(false);
     }
@@ -85,7 +85,7 @@ export default function Contributor() {
         <div className="flex flex-col items-center justify-center py-16 text-gray-500">
           <Loader2 className="w-12 h-12 animate-spin text-primary mb-4" />
           <p>Pull Request analysis in progress…</p>
-<p className="text-sm mt-1">This may take a few seconds.</p>
+          <p className="text-sm mt-1">This may take a few seconds.</p>
 
         </div>
       )}

@@ -17,7 +17,7 @@ export default function DiffViewer({ originalCode = '', correctedCode = '', file
           showDiffOnly={false}
           useDarkTheme={false}
           leftTitle="Original"
-          rightTitle="Corrigé"
+          rightTitle="Corrected"
           styles={{
             variables: {
               light: {

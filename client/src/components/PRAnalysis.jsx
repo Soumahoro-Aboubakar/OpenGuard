@@ -53,7 +53,7 @@ export default function PRAnalysis({ data, downloads }) {
             PR #{prInfo?.number} — {prInfo?.title}
           </h2>
           <p className="text-sm text-gray-500 mt-1">
-            {prInfo?.repo} · Auteur: {prInfo?.author}
+            {prInfo?.repo} · Author: {prInfo?.author}
           </p>
         </div>
         <ScoreBadge score={analysis?.score} />
@@ -66,7 +66,7 @@ export default function PRAnalysis({ data, downloads }) {
           className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
         >
           <FileCode className="w-4 h-4" />
-          Télécharger ANALYSIS.md
+          Download ANALYSIS.md
         </button>
         <button
           type="button"
@@ -74,7 +74,7 @@ export default function PRAnalysis({ data, downloads }) {
           className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
         >
           <Download className="w-4 h-4" />
-          Télécharger HOWTO.md
+          Download HOWTO.md
         </button>
         {downloads?.correctedCode && (
           <button
@@ -83,19 +83,19 @@ export default function PRAnalysis({ data, downloads }) {
             className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
           >
             <Download className="w-4 h-4" />
-            Télécharger code corrigé (.zip)
+            Download corrected code (.zip)
           </button>
         )}
       </div>
 
       <section>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Problèmes détectés</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Detected Problems</h3>
         <ProblemList fileAnalyses={fileAnalyses} onSelectFile={setSelectedFile} />
       </section>
 
       {selectedFile && (originalContent || correctedContent) && (
         <section>
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Comparaison du code</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Code Comparison</h3>
           <DiffViewer
             originalCode={originalContent}
             correctedCode={correctedContent}

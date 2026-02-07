@@ -1,8 +1,8 @@
 import { AlertCircle, AlertTriangle, Info } from 'lucide-react';
 
 const config = {
-  error: { icon: AlertCircle, bg: 'bg-red-100 text-red-800', label: 'Erreur' },
-  warning: { icon: AlertTriangle, bg: 'bg-amber-100 text-amber-800', label: 'Avertissement' },
+  error: { icon: AlertCircle, bg: 'bg-red-100 text-red-800', label: 'Error' },
+  warning: { icon: AlertTriangle, bg: 'bg-amber-100 text-amber-800', label: 'Warning' },
   info: { icon: Info, bg: 'bg-blue-100 text-blue-800', label: 'Info' },
 };
 

@@ -7,8 +7,8 @@ const api = axios.create({
 });
 
 /**
- * Analyse une Pull Request
- * @param {string} prUrl - URL GitHub de la PR
+ * Analyze a Pull Request
+ * @param {string} prUrl - GitHub PR URL
  * @returns {Promise<{ success, data }>}
  */
 export async function analyzePR(prUrl) {
@@ -17,7 +17,7 @@ export async function analyzePR(prUrl) {
 }
 
 /**
- * Récupère les stats et PRs ouvertes d'un repo
+ * Retrieve stats and open PRs from a repository
  * @param {string} owner
  * @param {string} repo
  */

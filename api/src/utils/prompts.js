@@ -1,35 +1,35 @@
 /**
- * Prompts pour l'analyse de code avec Gemini
+ * Prompts for code analysis with Gemini
  */
 
-export const SYSTEM_PROMPT_ANALYSIS = `Tu es un expert en revue de code open source. Tu analyses les fichiers d'une Pull Request pour détecter :
-- Problèmes de type-safety et typage
-- Non-respect des conventions du projet (style, nommage)
-- Code potentiellement généré par IA de mauvaise qualité (répétitions, code inutile, commentaires évidents)
-- Bugs ou anti-patterns courants
-- Problèmes de sécurité ou de performance
+export const SYSTEM_PROMPT_ANALYSIS = `You are an expert in open source code review. You analyze Pull Request files to detect:
+- Type-safety and typing problems
+- Non-compliance with project conventions (style, naming)
+- Potentially low-quality AI-generated code (repetitions, useless code, obvious comments)
+- Common bugs or anti-patterns
+- Security or performance issues
 
-Pour chaque problème trouvé, fournis :
-- file: chemin du fichier
-- line: numéro de ligne (ou plage startLine, endLine)
+For each problem found, provide:
+- file: file path
+- line: line number (or range startLine, endLine)
 - severity: "error" | "warning" | "info"
 - category: "type-safety" | "conventions" | "quality" | "security" | "performance" | "other"
-- message: description courte
-- explanation: explication pédagogique détaillée
-- suggestion: correction suggérée (snippet de code si pertinent)
-- impact: impact si non corrigé
+- message: short description
+- explanation: detailed pedagogical explanation
+- suggestion: suggested fix (code snippet if relevant)
+- impact: impact if not fixed
 
-Réponds UNIQUEMENT avec un JSON valide, sans markdown ni texte autour.`;
+Respond ONLY with valid JSON, without markdown or surrounding text.`;
 
 export function getAnalysisUserPrompt(repoContext, files) {
-  const contextBlock = [repoContext.readme, repoContext.contributing].filter(Boolean).join('\n\n---\n\n') || 'Aucun README/CONTRIBUTING fourni.';
+  const contextBlock = [repoContext.readme, repoContext.contributing].filter(Boolean).join('\n\n---\n\n') || 'No README/CONTRIBUTING provided.';
   const filesBlock = files
-    .map((f) => `## Fichier: ${f.filename}\n\`\`\`\n${f.content.slice(0, 50000)}\n\`\`\``)
+    .map((f) => `## File: ${f.filename}\n\`\`\`\n${f.content.slice(0, 50000)}\n\`\`\``)
     .join('\n\n');
-  return `Contexte du repository:\n${contextBlock.slice(0, 20000)}\n\nFichiers de la PR:\n${filesBlock}\n\nAnalyse chaque fichier et retourne un JSON avec la structure: { "problems": [ { "file", "line", "severity", "category", "message", "explanation", "suggestion", "impact" } ], "summary": "résumé en une phrase" }.`;
+  return `Repository context:\n${contextBlock.slice(0, 20000)}\n\nPR files:\n${filesBlock}\n\nAnalyze each file and return a JSON with the structure: { "problems": [ { "file", "line", "severity", "category", "message", "explanation", "suggestion", "impact" } ], "summary": "one-sentence summary" }.`;
 }
 
-export const SYSTEM_PROMPT_CORRECTIONS = `Tu génères des corrections de code à partir d'une analyse. Pour chaque problème avec une suggestion, applique la correction dans le contenu du fichier concerné. Retourne un JSON avec une clé "files" : tableau d'objets { "filename", "content" } contenant le code corrigé complet pour chaque fichier modifié. Ne modifie que ce qui est nécessaire pour corriger les problèmes. Conserve l'indentation et le style du projet. Réponds UNIQUEMENT en JSON valide.`;
+export const SYSTEM_PROMPT_CORRECTIONS = `You generate code corrections from an analysis. For each problem with a suggestion, apply the correction in the content of the affected file. Return a JSON with a "files" key: array of objects { "filename", "content" } containing the complete corrected code for each modified file. Only modify what is necessary to fix the problems. Preserve the project's indentation and style. Respond ONLY with valid JSON.`;
 
 export function getCorrectionsUserPrompt(analysis, files) {
   const problemsDesc = analysis.fileAnalyses
@@ -37,5 +37,5 @@ export function getCorrectionsUserPrompt(analysis, files) {
     .map((p) => `- ${p.file}:${p.line} [${p.severity}] ${p.message}\n  Suggestion: ${p.suggestion || 'N/A'}`)
     .join('\n');
   const filesContent = files.map((f) => `## ${f.filename}\n\`\`\`\n${f.content}\n\`\`\``).join('\n\n');
-  return `Problèmes à corriger:\n${problemsDesc}\n\nContenu actuel des fichiers:\n${filesContent}\n\nRetourne le JSON avec la clé "files" contenant les fichiers corrigés.`;
+  return `Problems to fix:\n${problemsDesc}\n\nCurrent file contents:\n${filesContent}\n\nReturn the JSON with the "files" key containing the corrected files.`;
 }

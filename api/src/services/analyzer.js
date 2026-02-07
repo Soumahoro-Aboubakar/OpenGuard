@@ -3,28 +3,28 @@ import * as gemini from './gemini.js';
 import { formatAnalysisMd, formatHowtoMd } from '../utils/formatters.js';
 import archiver from 'archiver';
 /**
- * Pipeline complet : récupérer PR → analyser → corriger → formater
+ * Complete pipeline: fetch PR → analyze → fix → format
  * @param {string} prUrl
  * @returns {Promise<{ prInfo, analysis, correctedFiles, reportMd, howtoMd, zipBase64 }>}
  */
 export async function analyzePR(prUrl) {
-  console.log('[ANALYZER] Début de l\'analyse pour:', prUrl);
+  console.log('[ANALYZER] Starting analysis for:', prUrl);
 
   const { owner, repo, number } = github.parsePRUrl(prUrl);
-  console.log('[ANALYZER] PR parsée:', { owner, repo, number });
+  console.log('[ANALYZER] PR parsed:', { owner, repo, number });
 
   const [prInfo, files, repoContext] = await Promise.all([
     github.getPRInfo(owner, repo, number),
     github.getPRFiles(owner, repo, number),
     github.getRepoContext(owner, repo),
   ]);
-  console.log('[ANALYZER] Données GitHub récupérées:', { filesCount: files.length });
+  console.log('[ANALYZER] GitHub data retrieved:', { filesCount: files.length });
 
   if (!files.length) {
-    console.log('[ANALYZER] Aucun fichier à analyser');
+    console.log('[ANALYZER] No files to analyze');
     return {
       prInfo,
-      analysis: { score: 100, totalProblems: 0, fileAnalyses: [], summary: 'Aucun fichier à analyser.' },
+      analysis: { score: 100, totalProblems: 0, fileAnalyses: [], summary: 'No files to analyze.' },
       correctedFiles: [],
       fileContents: {},
       reportMd: '',
@@ -33,26 +33,26 @@ export async function analyzePR(prUrl) {
     };
   }
 
-  console.log('[ANALYZER] Appel Gemini analyzeCode...');
+  console.log('[ANALYZER] Calling Gemini analyzeCode...');
   const analysis = await gemini.analyzeCode(repoContext, files);
-  console.log('[ANALYZER] Analyse terminée:', { problemsCount: analysis.problems?.length, score: analysis.score });
+  console.log('[ANALYZER] Analysis complete:', { problemsCount: analysis.problems?.length, score: analysis.score });
 
   let correctedFiles = files;
   try {
-    console.log('[ANALYZER] Appel Gemini generateCorrections...');
+    console.log('[ANALYZER] Calling Gemini generateCorrections...');
     correctedFiles = await gemini.generateCorrections(analysis, files);
-    console.log('[ANALYZER] Corrections générées:', { correctedCount: correctedFiles.length });
+    console.log('[ANALYZER] Corrections generated:', { correctedCount: correctedFiles.length });
   } catch (e) {
-    console.warn('[ANALYZER] Génération des corrections échouée:', e.message);
+    console.warn('[ANALYZER] Correction generation failed:', e.message);
   }
 
-  console.log('[ANALYZER] Formatage du rapport...');
+  console.log('[ANALYZER] Formatting report...');
   const reportMd = formatAnalysisMd(prInfo, analysis);
   const howtoMd = formatHowtoMd(prInfo);
 
-  console.log('[ANALYZER] Création du ZIP...');
+  console.log('[ANALYZER] Creating ZIP...');
   const zipBase64 = await createZipBase64(correctedFiles);
-  console.log('[ANALYZER] ZIP créé');
+  console.log('[ANALYZER] ZIP created');
 
   const fileContents = {};
   for (const f of files) {
@@ -63,7 +63,7 @@ export async function analyzePR(prUrl) {
     fileContents[f.filename].corrected = f.content;
   }
 
-  console.log('[ANALYZER] Analyse complète, renvoi des résultats');
+  console.log('[ANALYZER] Analysis complete, returning results');
   return {
     prInfo,
     analysis,
@@ -76,7 +76,7 @@ export async function analyzePR(prUrl) {
 }
 
 /**
- * Crée une archive ZIP des fichiers et la retourne en base64
+ * Creates a ZIP archive of files and returns it as base64
  */
 function createZipBase64(files) {
   return new Promise((resolve, reject) => {

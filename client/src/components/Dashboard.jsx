@@ -10,14 +10,14 @@ export default function Dashboard({ stats = {}, pullRequests = [] }) {
       <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
         <div className="flex items-center gap-2 text-gray-600 mb-2">
           <GitPullRequest className="w-5 h-5" />
-          <span className="font-medium">PRs ouvertes</span>
+          <span className="font-medium">Open PRs</span>
         </div>
         <p className="text-3xl font-bold text-primary-dark">{totalPRs}</p>
       </div>
       <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
         <div className="flex items-center gap-2 text-gray-600 mb-2">
           <TrendingUp className="w-5 h-5" />
-          <span className="font-medium">Score moyen</span>
+          <span className="font-medium">Average Score</span>
         </div>
         <div className="mt-2">
           <ScoreBadge score={Math.round(averageScore)} />
@@ -26,7 +26,7 @@ export default function Dashboard({ stats = {}, pullRequests = [] }) {
       <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
         <div className="flex items-center gap-2 text-gray-600 mb-2">
           <BarChart3 className="w-5 h-5" />
-          <span className="font-medium">Répartition des problèmes</span>
+          <span className="font-medium">Problem Distribution</span>
         </div>
         <ul className="mt-2 space-y-1 text-sm">
           {distEntries.length ? (
@@ -37,7 +37,7 @@ export default function Dashboard({ stats = {}, pullRequests = [] }) {
               </li>
             ))
           ) : (
-            <li className="text-gray-500">Aucune donnée</li>
+            <li className="text-gray-500">No data</li>
           )}
         </ul>
       </div>

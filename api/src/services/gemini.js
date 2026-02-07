@@ -16,18 +16,18 @@ const modelName = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
 const genAI = apiKey ? new GoogleGenerativeAI(apiKey) : null;
 
 /**
- * Tente de réparer un JSON tronqué en fermant les structures ouvertes
+ * Attempts to repair truncated JSON by closing open structures
  */
 function repairTruncatedJson(jsonStr) {
   let str = jsonStr;
 
-  // Supprimer le dernier élément incomplet après une virgule
-  // Ex: "problems": [{ ... }, { "file": "test" <-- tronqué
+  // Remove the last incomplete element after a comma
+  // Ex: "problems": [{ ... }, { "file": "test" <-- truncated
   str = str.replace(/,\s*("[^"]*":\s*)?("[^"]*)?$/g, '');
-  str = str.replace(/,\s*\{[^}]*$/g, ''); // Supprimer objet incomplet
-  str = str.replace(/,\s*"[^"]*$/g, '');  // Supprimer chaîne incomplète
+  str = str.replace(/,\s*\{[^}]*$/g, ''); // Remove incomplete object
+  str = str.replace(/,\s*"[^"]*$/g, '');  // Remove incomplete string
 
-  // Compter les accolades et crochets ouverts
+  // Count open braces and brackets
   let openBraces = 0;
   let openBrackets = 0;
   let inString = false;
@@ -54,13 +54,13 @@ function repairTruncatedJson(jsonStr) {
     }
   }
 
-  // Fermer les chaînes non terminées (si nombre impair de guillemets)
+  // Close unterminated strings (if odd number of quotes)
   const quoteCount = (str.match(/(?<!\\)"/g) || []).length;
   if (quoteCount % 2 !== 0) {
     str += '"';
   }
 
-  // Fermer les structures ouvertes
+  // Close open structures
   while (openBrackets > 0) {
     str += ']';
     openBrackets--;
@@ -78,45 +78,45 @@ function parseJsonFromResponse(text) {
   const start = trimmed.indexOf('{');
 
   if (start === -1) {
-    throw new Error('Réponse Gemini invalide: pas de JSON trouvé');
+    throw new Error('Invalid Gemini response: no JSON found');
   }
 
-  // Trouver la fin du JSON (dernière accolade fermante)
+  // Find the end of JSON (last closing brace)
   const end = trimmed.lastIndexOf('}') + 1;
   let jsonStr = end > start ? trimmed.slice(start, end) : trimmed.slice(start);
 
-  // Première tentative: parsing direct
+  // First attempt: direct parsing
   try {
     return JSON.parse(jsonStr);
   } catch (firstError) {
-    console.warn('JSON malformé, tentative de réparation...', firstError.message);
+    console.warn('Malformed JSON, attempting repair...', firstError.message);
 
-    // Deuxième tentative: réparer le JSON tronqué
+    // Second attempt: repair truncated JSON
     try {
       const repairedJson = repairTruncatedJson(jsonStr);
       const result = JSON.parse(repairedJson);
-      console.log('JSON réparé avec succès');
+      console.log('JSON repaired successfully');
       return result;
     } catch (repairError) {
-      console.error('Échec de la réparation JSON:', repairError.message);
+      console.error('JSON repair failed:', repairError.message);
 
-      // Fallback: retourner une structure minimale valide
-      console.warn('Retour d\'une structure par défaut');
+      // Fallback: return a minimal valid structure
+      console.warn('Returning default structure');
       return {
         problems: [],
-        summary: 'Analyse incomplète: la réponse Gemini a été tronquée. Veuillez réessayer.',
+        summary: 'Incomplete analysis: the Gemini response was truncated. Please try again.',
       };
     }
   }
 }
 
 /**
- * Appel à l'API Gemini (comme l'exemple GeminiClient avec @google/generative-ai)
- * systemInstruction est préfixé au prompt car l'ancien SDK peut ne pas le supporter en option.
+ * Call to Gemini API (like the GeminiClient example with @google/generative-ai)
+ * systemInstruction is prefixed to the prompt as the old SDK may not support it as an option.
  */
 /*
 async function generateContent(prompt, options = {}) {
-  if (!genAI) throw new Error('GEMINI_API_KEY non configurée');
+  if (!genAI) throw new Error('GEMINI_API_KEY not configured');
   const {
     systemInstruction = null,
     temperature = 0.3,
@@ -142,7 +142,7 @@ async function generateContent(prompt, options = {}) {
   return response.text();
 } */
 async function generateContent(prompt, options = {}) {
-  if (!genAI) throw new Error('GEMINI_API_KEY non configurée');
+  if (!genAI) throw new Error('GEMINI_API_KEY not configured');
 
   const {
     systemInstruction = null,
@@ -173,7 +173,7 @@ async function generateContent(prompt, options = {}) {
 }
 
 /**
- * Analyse le code (fichiers + contexte repo) et retourne problems + summary
+ * Analyzes code (files + repo context) and returns problems + summary
  */
 export async function analyzeCode(context, files) {
   const userPrompt = getAnalysisUserPrompt(context, files);
@@ -182,11 +182,11 @@ export async function analyzeCode(context, files) {
     temperature: 0.3,
     maxOutputTokens: 16384,
   });
-  console.log(text, " Voici le texte de l'utilisateur");
+  console.log(text, " Here is the user text");
   const parsed = parseJsonFromResponse(text);
-  console.log(parsed, " Voici le parsed");
+  console.log(parsed, " Here is the parsed result");
   const problems = parsed.problems || [];
-  const summary = parsed.summary || 'Analyse effectuée.';
+  const summary = parsed.summary || 'Analysis complete.';
   const score = calculateScore(problems);
 
   const byFile = new Map();
@@ -216,7 +216,7 @@ export async function analyzeCode(context, files) {
 }
 
 /**
- * Génère les fichiers corrigés à partir de l'analyse
+ * Generates corrected files from the analysis
  */
 export async function generateCorrections(analysis, files) {
   const userPrompt = getCorrectionsUserPrompt(analysis, files);

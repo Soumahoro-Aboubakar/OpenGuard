@@ -1,9 +1,9 @@
 /**
- * Formatage des données pour les réponses API et fichiers générés
+ * Formatting of data for API responses and generated files
  */
 
 /**
- * Calcule le score de qualité (0-100) à partir des problèmes
+ * Calculates quality score (0-100) from problems
  * @param {Array} problems
  * @returns {number}
  */
@@ -19,25 +19,25 @@ export function calculateScore(problems) {
 }
 
 /**
- * Génère le contenu ANALYSIS.md
+ * Generates ANALYSIS.md content
  */
 export function formatAnalysisMd(prInfo, analysis) {
   const lines = [
-    `# Rapport d'analyse - PR #${prInfo.number} - ${prInfo.title}`,
-    `Repository: ${prInfo.repo} | Auteur: ${prInfo.author}`,
+    `# Analysis Report - PR #${prInfo.number} - ${prInfo.title}`,
+    `Repository: ${prInfo.repo} | Author: ${prInfo.author}`,
     '',
-    '## Résumé',
-    `- **Score de qualité:** ${analysis.score}/100`,
-    `- **Nombre total de problèmes:** ${analysis.totalProblems}`,
+    '## Summary',
+    `- **Quality Score:** ${analysis.score}/100`,
+    `- **Total Problems:** ${analysis.totalProblems}`,
     '',
-    '## Détail par fichier',
+    '## Details by File',
   ];
   for (const fa of analysis.fileAnalyses || []) {
     lines.push(`### ${fa.filename}`);
     for (const p of fa.problems || []) {
-      lines.push(`- **Ligne ${p.line}** [${p.severity}] ${p.category}: ${p.message}`);
-      lines.push(`  - Explication: ${p.explanation}`);
-      if (p.suggestion) lines.push(`  - Correction suggérée:\n\`\`\`\n${p.suggestion}\n\`\`\``);
+      lines.push(`- **Line ${p.line}** [${p.severity}] ${p.category}: ${p.message}`);
+      lines.push(`  - Explanation: ${p.explanation}`);
+      if (p.suggestion) lines.push(`  - Suggested fix:\n\`\`\`\n${p.suggestion}\n\`\`\``);
       lines.push(`  - Impact: ${p.impact || 'N/A'}`);
       lines.push('');
     }
@@ -46,20 +46,20 @@ export function formatAnalysisMd(prInfo, analysis) {
 }
 
 /**
- * Génère le contenu HOWTO.md
+ * Generates HOWTO.md content
  */
 export function formatHowtoMd(prInfo) {
-  return `# Guide d'application des corrections - PR #${prInfo.number}
+  return `# Guide to Apply Corrections - PR #${prInfo.number}
 
-## Étapes
+## Steps
 
-1. **Télécharger le zip** des fichiers corrigés depuis OpenGuard.
-2. **Extraire** l'archive dans un répertoire temporaire.
-3. **Comparer** avec votre branche locale (ex: \`diff -r corrected/ ./src\`).
-4. **Appliquer** les corrections de manière sélective (fichier par fichier ou bloc par bloc).
-5. **Lancer les tests** locaux du projet (\`npm test\`, \`pytest\`, etc.).
-6. **Commit** et pousser les changements sur votre branche.
-7. **Mettre à jour** la Pull Request sur GitHub.
+1. **Download the zip** of corrected files from OpenGuard.
+2. **Extract** the archive to a temporary directory.
+3. **Compare** with your local branch (e.g.: \`diff -r corrected/ ./src\`).
+4. **Apply** corrections selectively (file by file or block by block).
+5. **Run local tests** for the project (\`npm test\`, \`pytest\`, etc.).
+6. **Commit** and push changes to your branch.
+7. **Update** the Pull Request on GitHub.
 
 Repository: ${prInfo.repo}
 PR: #${prInfo.number} - ${prInfo.title}

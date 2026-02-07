@@ -26,15 +26,15 @@ export default function ProblemList({ fileAnalyses = [], onSelectFile }) {
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap gap-2 items-center">
-        <span className="text-sm font-medium text-gray-600">Filtrer :</span>
+        <span className="text-sm font-medium text-gray-600">Filter:</span>
         <select
           value={filterSeverity}
           onChange={(e) => setFilterSeverity(e.target.value)}
           className="rounded border border-gray-300 px-2 py-1 text-sm"
         >
-          <option value="">Toutes sévérités</option>
-          <option value="error">Erreur</option>
-          <option value="warning">Avertissement</option>
+          <option value="">All severities</option>
+          <option value="error">Error</option>
+          <option value="warning">Warning</option>
           <option value="info">Info</option>
         </select>
         <select
@@ -42,7 +42,7 @@ export default function ProblemList({ fileAnalyses = [], onSelectFile }) {
           onChange={(e) => setFilterCategory(e.target.value)}
           className="rounded border border-gray-300 px-2 py-1 text-sm"
         >
-          <option value="">Toutes catégories</option>
+          <option value="">All categories</option>
           {CATEGORIES.map((c) => (
             <option key={c} value={c}>
               {c}
@@ -82,7 +82,7 @@ export default function ProblemList({ fileAnalyses = [], onSelectFile }) {
         ))}
       </ul>
       {sorted.length === 0 && (
-        <p className="text-gray-500 text-center py-8">Aucun problème à afficher.</p>
+        <p className="text-gray-500 text-center py-8">No problems to display.</p>
       )}
     </div>
   );

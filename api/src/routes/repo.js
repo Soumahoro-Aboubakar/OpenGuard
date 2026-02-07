@@ -22,7 +22,7 @@ function setCache(key, data) {
 
 /**
  * GET /api/repo-stats/:owner/:repo
- * Retourne les PRs ouvertes et des stats agrégées (scores simulés si pas d'analyse en cache)
+ * Returns open PRs and aggregated stats (simulated scores if no cached analysis)
  */
 router.get('/repo-stats/:owner/:repo', async (req, res) => {
   try {
@@ -64,7 +64,7 @@ router.get('/repo-stats/:owner/:repo', async (req, res) => {
     console.error('repo-stats error:', err);
     res.status(500).json({
       success: false,
-      error: err.message || 'Erreur lors de la récupération des stats du repo',
+      error: err.message || 'Error retrieving repo stats',
     });
   }
 });
