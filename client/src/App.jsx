@@ -47,7 +47,7 @@ function App() {
       </main>
 
       <footer className="border-t border-gray-200 py-4 text-center text-gray-500 text-sm">
-        OpenGuard — Analyse et correction automatique de Pull Requests avec Gemini
+        OpenGuard — Automatic Pull Request Analysis and Fixing with Gemini
       </footer>
     </div>
   );
