@@ -22,7 +22,7 @@ function App() {
               }
             >
               <User className="w-4 h-4" />
-              Contributeur
+              Open-source contributor
             </NavLink>
             <NavLink
               to="/maintainer"
@@ -33,7 +33,7 @@ function App() {
               }
             >
               <Users className="w-4 h-4" />
-              Mainteneur
+              Project maintainer
             </NavLink>
           </nav>
         </div>

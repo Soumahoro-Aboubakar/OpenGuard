@@ -44,9 +44,9 @@ export default function Maintainer() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Interface Mainteneur</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Maintainer Interface</h1>
         <p className="text-gray-600 mt-1">
-          Vue d'ensemble des Pull Requests ouvertes d'un repository et statistiques.
+         Overview of open Pull Requests in a repository and statistics.
         </p>
       </div>
 
@@ -70,7 +70,7 @@ export default function Maintainer() {
               Chargement…
             </>
           ) : (
-            'Voir les PRs'
+            'Check Pull Requests'
           )}
         </button>
       </form>

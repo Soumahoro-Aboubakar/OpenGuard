@@ -63,7 +63,7 @@ export default function ProblemList({ fileAnalyses = [], onSelectFile }) {
               <span className="font-mono text-sm text-gray-500">
                 {p.filename}:{p.line}
               </span>
-              {onSelectFile && (
+              {/*onSelectFile && (
                 <button
                   type="button"
                   onClick={() => onSelectFile(p.filename)}
@@ -71,7 +71,7 @@ export default function ProblemList({ fileAnalyses = [], onSelectFile }) {
                 >
                   Voir le fichier
                 </button>
-              )}
+              )*/}
             </div>
             <p className="mt-2 font-medium text-gray-900">{p.message}</p>
             {p.explanation && <p className="mt-1 text-sm text-gray-600">{p.explanation}</p>}

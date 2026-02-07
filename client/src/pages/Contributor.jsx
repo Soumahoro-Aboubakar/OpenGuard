@@ -41,9 +41,9 @@ export default function Contributor() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Interface Contributeur</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Contributor Interface</h1>
         <p className="text-gray-600 mt-1">
-          Analysez une Pull Request et obtenez un score de qualité, la liste des problèmes et le code corrigé.
+          Review a Pull Request and get a quality score, a list of issues, and the corrected code.
         </p>
       </div>
 
@@ -64,12 +64,12 @@ export default function Contributor() {
           {loading ? (
             <>
               <Loader2 className="w-5 h-5 animate-spin" />
-              Analyse en cours…
+              Processing analysis…
             </>
           ) : (
             <>
               <Search className="w-5 h-5" />
-              Analyser la PR
+              Analyze the Pull Request
             </>
           )}
         </button>
@@ -84,8 +84,9 @@ export default function Contributor() {
       {loading && (
         <div className="flex flex-col items-center justify-center py-16 text-gray-500">
           <Loader2 className="w-12 h-12 animate-spin text-primary mb-4" />
-          <p>Analyse de la Pull Request en cours…</p>
-          <p className="text-sm mt-1">Cela peut prendre quelques secondes.</p>
+          <p>Pull Request analysis in progress…</p>
+<p className="text-sm mt-1">This may take a few seconds.</p>
+
         </div>
       )}
 

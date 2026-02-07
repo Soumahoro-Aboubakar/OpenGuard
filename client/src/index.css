@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --font-sans: 'Sora', sans-serif;
+  --font-display: 'Fraunces', serif;
+  --ink: #0b0f1a;
+  --ink-soft: #1b2130;
+  --accent: #f97316;
+  --accent-2: #0ea5e9;
+  --canvas: #f7f3ee;
+  --mist: #eef2f6;
+}
+
 body {
-  @apply bg-gray-50 text-gray-900 antialiased;
+  font-family: var(--font-sans);
+  color: var(--ink);
+  background: radial-gradient(circle at top left, #fff4e6 0%, #f7f3ee 45%, #eef2f6 100%);
+  @apply antialiased;
 }
